@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
-import { getAllProducts } from "../models/products";
+import { addProductQuery, getProductsQuery } from "../models/products";
+import productValidators from "../validators/products";
+import { validationResult } from "express-validator";
 
-export const getProducts = async (req: Request, res: Response) => {
+const getProducts = async (req: Request, res: Response) => {
   try {
-    const products = getAllProducts();
+    const products = await getProductsQuery();
     return res
       .status(200)
       .json({ statusCode: 1, message: "Success", data: products });
@@ -16,10 +18,34 @@ export const getProducts = async (req: Request, res: Response) => {
   }
 };
 
-export const getProductById = async () => {};
+const getProductById = async () => {};
 
-export const addProduct = async () => {};
+const addProduct = async (req: Request, res: Response) => {
+  try {
+    // Validate
+    productValidators.checkValidationErrors(req, res);
+    // Perform query
+    const result = await addProductQuery(req.body);
+    return res
+      .status(201)
+      .json({ statusCode: 1, message: "Added", data: result });
+  } catch (error) {
+    return res.status(500).json({
+      statusCode: 0,
+      message: "Something went wrong",
+      error,
+    });
+  }
+};
 
-export const editProduct = async () => {};
+const editProduct = async () => {};
 
-export const deleteProduct = async () => {};
+const deleteProduct = async () => {};
+
+export default {
+  getProducts,
+  getProductById,
+  addProduct,
+  editProduct,
+  deleteProduct,
+};
