@@ -4,3 +4,10 @@ export type ProductType = {
   price: number;
   stock: number;
 };
+
+export type FiltersType = {
+  min_price: number;
+  max_price: number;
+  sortBy: "name" | "price" | "created_at";
+  order: "asc" | "desc";
+};

@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
 import { addProductQuery, getProductsQuery } from "../models/products";
+import { FiltersType } from "../utils/types";
 import productValidators from "../validators/products";
-import { validationResult } from "express-validator";
 
 const getProducts = async (req: Request, res: Response) => {
   try {
-    const products = await getProductsQuery();
+    const queryParams = req.query as unknown as FiltersType;
+    const products = await getProductsQuery(queryParams);
     return res
       .status(200)
       .json({ statusCode: 1, message: "Success", data: products });
@@ -13,7 +14,7 @@ const getProducts = async (req: Request, res: Response) => {
     return res.status(500).json({
       statusCode: 0,
       message: "Something went wrong",
-      error: "Server Error",
+      error,
     });
   }
 };

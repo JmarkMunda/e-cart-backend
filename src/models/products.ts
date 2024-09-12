@@ -1,11 +1,29 @@
 import pool from "../config/db";
-import { ProductType } from "../utils/types";
+import { FiltersType, ProductType } from "../utils/types";
 
-export const getProductsQuery = async () => {
-  const { rows } = await pool.query("SELECT * FROM products;");
+// GET PRODUCTS
+export const getProductsQuery = async (filters: FiltersType) => {
+  const { min_price, max_price, sortBy, order } = filters;
+  let query = "SELECT * FROM products WHERE 1=1";
+  const queryParams: any[] = [];
+
+  if (min_price) {
+    queryParams.push(min_price);
+    query += ` AND price >= $${queryParams.length}`;
+  }
+  if (max_price) {
+    queryParams.push(max_price);
+    query += ` AND price <= $${queryParams.length}`;
+  }
+  if (sortBy) {
+    query += ` ORDER BY ${sortBy} ${order.toUpperCase()}`;
+  }
+
+  const { rows } = await pool.query(query, queryParams);
   return rows;
 };
 
+// ADD PRODUCT
 export const addProductQuery = async ({
   name,
   description,
@@ -13,7 +31,7 @@ export const addProductQuery = async ({
   stock,
 }: ProductType) => {
   const { rows } = await pool.query(
-    "INSERT INTO products (name, description, price, stock) VALUES ($1, $2, $3, $4) RETURNING *;",
+    "INSERT INTO products (name, description, price, stock) VALUES ($1, $2, $3, $4) RETURNING *",
     [name, description, price, stock]
   );
   return rows;
