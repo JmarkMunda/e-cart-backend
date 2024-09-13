@@ -6,6 +6,7 @@ import validateRequest from "../middlewares/validateRequest";
 const router = express.Router();
 
 router.get("/", productsController.getProducts);
+router.get("/:id", productsController.getProductById);
 router.post(
   "/add",
   productValidator.addProduct,

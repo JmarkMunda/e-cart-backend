@@ -1,5 +1,4 @@
-import { NextFunction, Request, Response } from "express";
-import { body, validationResult } from "express-validator";
+import { body, param } from "express-validator";
 
 const addProduct = body(["name", "description", "price", "stock"])
   .notEmpty()
