@@ -36,3 +36,13 @@ export const addProductQuery = async ({
   );
   return rows;
 };
+
+// EDIT PRODUCT
+export const editProductQuery = async (id: string, data: ProductType) => {
+  const { name, description, price, stock } = data;
+  const { rows } = await pool.query(
+    "UPDATE products SET name = $1, description = $2, price = $3, stock = $4 WHERE id = $5 RETURNING *",
+    [name, description, price, stock, id]
+  );
+  return rows;
+};

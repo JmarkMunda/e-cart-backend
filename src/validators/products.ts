@@ -1,17 +1,12 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { body, validationResult } from "express-validator";
 
-const addProducts = body(["name", "description", "price", "stock"])
+const addProduct = body(["name", "description", "price", "stock"])
   .notEmpty()
   .escape();
 
-const checkValidationErrors = (req: Request, res: Response) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res
-      .status(422)
-      .json({ statusCode: 0, message: "Invalid", errors: errors.array() });
-  }
-};
+const editProduct = body(["name", "description", "price", "stock"])
+  .notEmpty()
+  .escape();
 
-export default { addProducts, checkValidationErrors };
+export default { addProduct, editProduct };
