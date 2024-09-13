@@ -19,5 +19,6 @@ router.put(
   validateRequest,
   productsController.editProduct
 );
+router.delete("/:id", productsController.deleteProduct);
 
 export default router;

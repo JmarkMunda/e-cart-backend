@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import {
   addProductQuery,
+  deleteProductQuery,
   editProductQuery,
   getProductQuery,
   getProductsQuery,
@@ -10,6 +11,7 @@ import { FiltersType } from "../utils/types";
 const getProducts = async (req: Request, res: Response) => {
   try {
     const queryParams = req.query as unknown as FiltersType;
+    // Perform a query
     const products = await getProductsQuery(queryParams);
     return res
       .status(200)
@@ -26,6 +28,7 @@ const getProducts = async (req: Request, res: Response) => {
 const getProductById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
+    // Perform a query
     const data = await getProductQuery(id);
     return res.status(200).json({ statusCode: 1, message: "Success", data });
   } catch (error) {
@@ -37,7 +40,7 @@ const getProductById = async (req: Request, res: Response) => {
 
 const addProduct = async (req: Request, res: Response) => {
   try {
-    // Perform query
+    // Perform a query
     const data = await addProductQuery(req.body);
     return res.status(201).json({ statusCode: 1, message: "Added", data });
   } catch (error) {
@@ -71,7 +74,30 @@ const editProduct = async (req: Request, res: Response) => {
   }
 };
 
-const deleteProduct = async () => {};
+const deleteProduct = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    // Check if the product exists
+    const product = await getProductQuery(id);
+    if (!product.length) {
+      return res
+        .status(200)
+        .json({ statusCode: 0, message: "Product does not exist" });
+    }
+    // Perform a query
+    await deleteProductQuery(id);
+    return res.status(200).json({
+      statusCode: 1,
+      message: "Successfully deleted the product",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      statusCode: 0,
+      message: "Something went wrong",
+      error,
+    });
+  }
+};
 
 export default {
   getProducts,
