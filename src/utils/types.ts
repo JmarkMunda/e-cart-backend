@@ -11,3 +11,10 @@ export type FiltersType = {
   sortBy: "name" | "price" | "created_at";
   order: "asc" | "desc";
 };
+
+export type UserType = {
+  name: string;
+  email: string;
+  profile_picture: string;
+  password: string;
+};
