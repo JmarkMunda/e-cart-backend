@@ -4,7 +4,7 @@ const register = [
   body(["name", "profile_picture"]).notEmpty().escape(),
   body("email")
     .isEmail()
-    .withMessage("Please provide valid email address")
+    .withMessage("Please provide a valid email address")
     .notEmpty()
     .withMessage("Email is required")
     .escape(),
@@ -22,4 +22,11 @@ const register = [
   }),
 ];
 
-export default { register };
+const login = [
+  check("email", "Email is required").notEmpty(),
+  check("email", "Please provide a valid email address").isEmail(),
+  check("password", "Password is required").notEmpty(),
+  check("password", "Must be at least 8 characters").isLength({ min: 8 }),
+];
+
+export default { register, login };
