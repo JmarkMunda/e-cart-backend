@@ -4,7 +4,7 @@ import productsRouter from "./routers/products";
 import authRouter from "./routers/auth";
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(helmet());
 app.use(express.json());
